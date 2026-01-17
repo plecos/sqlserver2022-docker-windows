@@ -56,6 +56,31 @@ If you see this message when trying to switch to Windows containers:
 
 3. **Virtualization**: Ensure virtualization is enabled in your BIOS/UEFI settings.
 
+## Setup
+
+### Create the Environment File
+
+Before building or running the container, you must create a `.env` file in the project root with your SA password:
+
+```powershell
+# Create .env file
+@"
+SA_PASSWORD=YourStrong!Passw0rd
+"@ | Out-File -FilePath .env -Encoding UTF8
+```
+
+Or manually create a `.env` file with the following content:
+
+```
+SA_PASSWORD=YourStrong!Passw0rd
+```
+
+**Password Requirements**:
+- At least 8 characters
+- Contains uppercase, lowercase, numbers, and symbols
+
+> **Note**: The `.env` file is excluded from git via `.gitignore` to prevent committing sensitive data.
+
 ## Usage
 
 ### Build the Image
@@ -65,6 +90,20 @@ docker-compose build
 ```
 
 > **Note**: The initial build will take a significant amount of time as it downloads and installs SQL Server 2022.
+
+### Using Local Installation Media (Optional)
+
+To speed up builds and avoid downloading SQL Server each time, you can provide local installation media:
+
+1. Create a folder named `SQLServer2022Media` in the project root
+2. Place the SQL Server 2022 CAB installer executable in that folder (e.g., `SQLServer2022-DEV-x64-ENU.exe`)
+
+The Dockerfile will automatically detect and use local media if present. If not found, it will download the installer from Microsoft.
+
+**To obtain the media file:**
+1. Download the SQL Server 2022 Developer installer from [Microsoft](https://go.microsoft.com/fwlink/p/?linkid=2215158&clcid=0x409&culture=en-us&country=us)
+2. Run it with: `SQL2022-SSEI-Dev.exe /Action=Download /MediaPath=.\SQLServer2022Media /MediaType=CAB /Quiet`
+3. The downloaded `.exe` file in `SQLServer2022Media` is what the Dockerfile needs
 
 ### Start the Container
 
@@ -118,14 +157,13 @@ docker-compose down -v
 
 ### Changing the SA Password
 
-Update the `SA_PASSWORD` environment variable in both files:
-
-1. `Dockerfile` (line 9) - used during image build
-2. `docker-compose.yml` (line 10) - used at runtime
+Update the `SA_PASSWORD` value in your `.env` file. The password is used both during image build and at container runtime.
 
 **Password Requirements**:
 - At least 8 characters
 - Contains uppercase, lowercase, numbers, and symbols
+
+> **Important**: If you change the password, you must rebuild the image with `docker-compose build` for the change to take effect.
 
 ### SQL Server Configuration
 
