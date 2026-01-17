@@ -91,6 +91,20 @@ docker-compose build
 
 > **Note**: The initial build will take a significant amount of time as it downloads and installs SQL Server 2022.
 
+### Using Local Installation Media (Optional)
+
+To speed up builds and avoid downloading SQL Server each time, you can provide local installation media:
+
+1. Create a folder named `SQLServer2022Media` in the project root
+2. Place the SQL Server 2022 CAB installer executable in that folder (e.g., `SQLServer2022-DEV-x64-ENU.exe`)
+
+The Dockerfile will automatically detect and use local media if present. If not found, it will download the installer from Microsoft.
+
+**To obtain the media file:**
+1. Download the SQL Server 2022 Developer installer from [Microsoft](https://go.microsoft.com/fwlink/p/?linkid=2215158&clcid=0x409&culture=en-us&country=us)
+2. Run it with: `SQL2022-SSEI-Dev.exe /Action=Download /MediaPath=.\SQLServer2022Media /MediaType=CAB /Quiet`
+3. The downloaded `.exe` file in `SQLServer2022Media` is what the Dockerfile needs
+
 ### Start the Container
 
 ```powershell
