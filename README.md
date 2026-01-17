@@ -56,6 +56,31 @@ If you see this message when trying to switch to Windows containers:
 
 3. **Virtualization**: Ensure virtualization is enabled in your BIOS/UEFI settings.
 
+## Setup
+
+### Create the Environment File
+
+Before building or running the container, you must create a `.env` file in the project root with your SA password:
+
+```powershell
+# Create .env file
+@"
+SA_PASSWORD=YourStrong!Passw0rd
+"@ | Out-File -FilePath .env -Encoding UTF8
+```
+
+Or manually create a `.env` file with the following content:
+
+```
+SA_PASSWORD=YourStrong!Passw0rd
+```
+
+**Password Requirements**:
+- At least 8 characters
+- Contains uppercase, lowercase, numbers, and symbols
+
+> **Note**: The `.env` file is excluded from git via `.gitignore` to prevent committing sensitive data.
+
 ## Usage
 
 ### Build the Image
@@ -118,14 +143,13 @@ docker-compose down -v
 
 ### Changing the SA Password
 
-Update the `SA_PASSWORD` environment variable in both files:
-
-1. `Dockerfile` (line 9) - used during image build
-2. `docker-compose.yml` (line 10) - used at runtime
+Update the `SA_PASSWORD` value in your `.env` file. The password is used both during image build and at container runtime.
 
 **Password Requirements**:
 - At least 8 characters
 - Contains uppercase, lowercase, numbers, and symbols
+
+> **Important**: If you change the password, you must rebuild the image with `docker-compose build` for the change to take effect.
 
 ### SQL Server Configuration
 

@@ -5,8 +5,11 @@ FROM mcr.microsoft.com/windows/servercore:ltsc2022
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
+# Build argument for SA password (passed from docker-compose.yml)
+ARG SA_PASSWORD
+
 # Set environment variables
-ENV SA_PASSWORD="YourStrong!Passw0rd" \
+ENV SA_PASSWORD=${SA_PASSWORD} \
     ACCEPT_EULA="Y" \
     MSSQL_PID="Developer"
 

@@ -3,10 +3,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        SA_PASSWORD: ${SA_PASSWORD}
     container_name: sqlserver2022
     hostname: sqlserver2022
     environment:
-      - SA_PASSWORD=YourStrong!Passw0rd
+      - SA_PASSWORD=${SA_PASSWORD}
       - ACCEPT_EULA=Y
     ports:
       - "1433:1433"
