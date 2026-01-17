@@ -1,0 +1,33 @@
+services:
+  sqlserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sqlserver2022
+    hostname: sqlserver2022
+    environment:
+      - SA_PASSWORD=YourStrong!Passw0rd
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:C:\SQLServerData
+      - sqlserver-logs:C:\SQLServerLogs
+      - sqlserver-backup:C:\SQLServerBackup
+    networks:
+      - sqlserver-network
+    restart: unless-stopped
+    # Windows containers require isolation mode
+    isolation: process
+
+volumes:
+  sqlserver-data:
+    driver: local
+  sqlserver-logs:
+    driver: local
+  sqlserver-backup:
+    driver: local
+
+networks:
+  sqlserver-network:
+    driver: nat
