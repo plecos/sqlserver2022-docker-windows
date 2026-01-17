@@ -4,11 +4,11 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        SA_PASSWORD: ${SA_PASSWORD}
+        SA_PASSWORD: ${SA_PASSWORD:?SA_PASSWORD must be set in .env file}
     container_name: sqlserver2022
     hostname: sqlserver2022
     environment:
-      - SA_PASSWORD=${SA_PASSWORD}
+      - SA_PASSWORD=${SA_PASSWORD:?SA_PASSWORD must be set in .env file}
       - ACCEPT_EULA=Y
     ports:
       - "1433:1433"
